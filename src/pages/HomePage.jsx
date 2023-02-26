@@ -63,7 +63,7 @@ const HomePage = () => {
       }
     })
     filteredVndrs.sort((a, b) => a.vendorName.products?.find(p => p.productName === selectedProductName).productPrice - b.vendorName.products?.find(p => p.productName === selectedProductName).productPrice)
-
+    console.log(filteredVndrs)
     setFilteredVendors(filteredVndrs)
   }
 
@@ -120,7 +120,7 @@ const HomePage = () => {
 
       {
         loading ? <div className="spinner-border text-primary" role="status"> Loading </div> : <div className='container'>
-          <div className='row'>
+          <div className='row mt-3'>
             <div className='col-md-6'>
               <h1>Home Page</h1>
             </div>
@@ -155,10 +155,11 @@ const HomePage = () => {
               </thead>
               <tbody>
                 {filteredVendors && filteredVendors.map((vendor, index) => {
-                  const p = vendor.products?.find(p => p.productName === selectedProductName)
+                  let p = vendor.products?.find(p => p.productName === selectedProductName)
+                  let newPrice = 0;
                   // console.log(p)
                   // console.log(selectedProduct)
-                  console.log(vendor.products?.find(p => p.productName === selectedProductName)?.productPrice)
+                  // console.log(vendor.products?.find(p => p.productName === selectedProductName)?.productPrice)
 
 
                   return (
@@ -168,9 +169,50 @@ const HomePage = () => {
                       <td>{vendor.emailId}</td>
                       <td>{vendor.products?.find(
                         p => p.productName === selectedProductName
-                      )?.productPrice}
+                      )?.productPrice === 0 ? (
+                        <div className='input-group mb-3'>
+                          <input
+                            type='text'
+                            className='form-control'
+                            placeholder='Enter Price'
+                            aria-label='Enter Price'
+                            onChange={e => {
+                              newPrice = e.target.value
+                            }}
+                          />
+                          <button
+                            className='btn btn-outline-secondary'
+                            type='button'
+                            id='button-addon2'
+                            onClick={() => {
+                              axios
+                                .put(
+                                  `http://localhost:8080/api/product/${vendor.products?.find(
+                                    p => p.productName === selectedProductName
+                                  )?.productId}`,
+                                  {
+                                    productName: selectedProductName,
+                                    productPrice: newPrice,
+                                  }
+                                )
+                                .then(res => {
+                                  console.log(res.data)
+                                  getAllVendor()
+                                })
+                                .catch(err => {
+                                  console.log(err)
+                                })
+                            }}
+                          >
+                            Update
+                          </button>
+                        </div>
 
-                      </td>
+                      ) : vendor.products?.find(
+                        p => p.productName === selectedProductName
+                      )?.productPrice}</td>
+
+
                     </tr>
                   )
                 })
