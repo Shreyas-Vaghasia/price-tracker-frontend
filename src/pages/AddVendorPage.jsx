@@ -17,6 +17,30 @@ const AddVendorPage = () => {
   let [success, setSuccess] = useState(false)
   let [vendorsList, setVendorsList] = useState([])
 
+
+
+  const deleteVendor = (vendorId) => {
+    window.confirm('Are you sure you want to delete this vendor?')
+
+    axios.delete(`http://localhost:8080/api/vendor/${vendorId}`)
+      .then(res => {
+        console.log(res.data)
+        getAllVendors();
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
+    getAllVendors();
+    getAllProducts();
+  }
+
+  const editVendor = (vendorId) => {
+    //open modal 
+
+  }
+
+
   const onSubmit = e => {
     e.preventDefault()
     setLoading(true)
@@ -220,6 +244,7 @@ const AddVendorPage = () => {
                   <th scope='col'>Contact Number</th>
                   <th scope='col'>Email</th>
                   <th scope='col'>Products</th>
+                  <th scope='col'>Action</th>
 
                 </tr>
               </thead>
@@ -235,6 +260,26 @@ const AddVendorPage = () => {
                         <span key={product.productId}>{product.productName + ","}</span>
                       ))}
                     </td>
+                    <td>
+                      <button
+                        type='button'
+                        className='btn btn-danger'
+                        onClick={() => deleteVendor(vendor.vendorId)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                    <td >
+                      <button
+                        type='button'
+                        className='btn btn-primary'
+                        onClick={() => editVendor(vendor.vendorId)}
+                      >
+                        Edit
+                      </button>
+                    </td>
+
+
                   </tr>
                 ))}
               </tbody>

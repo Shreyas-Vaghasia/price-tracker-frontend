@@ -4,6 +4,7 @@ import NavigationBar from './../components/NavigationBar'
 import axios from 'axios'
 import Select from 'react-select'
 import { useState, useEffect } from 'react'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const HomePage = () => {
   const [products, setProducts] = useState([])
@@ -14,6 +15,12 @@ const HomePage = () => {
   const [todaysPrice, setTodaysPrice] = useState([])
   const [yesterdaysPrice, setYesterdaysPrice] = useState([])
   const [selectedProduct, setSelectedProduct] = useState({})
+  const [isPriceZero, setIsPriceZero] = useState(false)
+  const [modal, setModal] = useState(false);
+
+  const toggle = () => setModal(!modal);
+
+
   const getAllProduct = () => {
     setLoading(true)
     axios
@@ -62,9 +69,18 @@ const HomePage = () => {
         })
       }
     })
-    filteredVndrs.sort((a, b) => a.vendorName.products?.find(p => p.productName === selectedProductName).productPrice - b.vendorName.products?.find(p => p.productName === selectedProductName).productPrice)
-    console.log(filteredVndrs)
-    setFilteredVendors(filteredVndrs)
+
+    // let data = filteredVndrs.sort((a, b) => a.vendorName.products?.find(p => p.productName === selectedProductName).productPrice - b.vendorName.products?.find(p => p.productName === selectedProductName).productPrice)
+
+    // console.log(data)
+
+
+    let sortedProducts = filteredVndrs.sort((a, b) => a.products?.find(p => p.productName === productName).productPrice - b.products?.find(p => p.productName === productName).productPrice)
+
+
+    setFilteredVendors(sortedProducts)
+
+
   }
 
 
@@ -144,94 +160,169 @@ const HomePage = () => {
           </div>
           <div className="row">
 
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">Vendor Name</th>
-                  <th scope="col">Vendor Phone</th>
-                  <th scope="col">Vendor Email</th>
-                  <th scope="col">Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredVendors && filteredVendors.map((vendor, index) => {
-                  let p = vendor.products?.find(p => p.productName === selectedProductName)
-                  let newPrice = 0;
-                  // console.log(p)
-                  // console.log(selectedProduct)
-                  // console.log(vendor.products?.find(p => p.productName === selectedProductName)?.productPrice)
+            {
+              selectedProductName ? (
+                <div className="col-md-12">
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">Vendor Name</th>
+                        <th scope="col">Vendor Phone</th>
+                        <th scope="col">Vendor Email</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredVendors && filteredVendors.map((vendor, index) => {
+                        let p = vendor.products?.find(p => p.productName === selectedProductName)
+                        let newPrice = 0;
+
+                        // console.log(p)
+                        // console.log(selectedProduct)
+                        // console.log(vendor.products?.find(p => p.productName === selectedProductName)?.productPrice)
 
 
-                  return (
-                    <tr key={index}>
-                      <td>{vendor.vendorName}</td>
-                      <td>{vendor.contactNumber}</td>
-                      <td>{vendor.emailId}</td>
-                      <td>{vendor.products?.find(
-                        p => p.productName === selectedProductName
-                      )?.productPrice === 0 ? (
-                        <div className='input-group mb-3'>
-                          <input
-                            type='text'
-                            className='form-control'
-                            placeholder='Enter Price'
-                            aria-label='Enter Price'
-                            onChange={e => {
-                              newPrice = e.target.value
-                            }}
-                          />
-                          <button
-                            className='btn btn-outline-secondary'
-                            type='button'
-                            id='button-addon2'
-                            onClick={() => {
-                              axios
-                                .put(
-                                  `http://localhost:8080/api/product/${vendor.products?.find(
-                                    p => p.productName === selectedProductName
-                                  )?.productId}`,
-                                  {
-                                    productName: selectedProductName,
-                                    productPrice: newPrice,
-                                  }
-                                )
-                                .then(res => {
-                                  console.log(res.data)
-                                  getAllVendor()
-                                })
-                                .catch(err => {
-                                  console.log(err)
-                                })
-                            }}
-                          >
-                            Update
-                          </button>
-                        </div>
+                        return (
+                          <tr key={index}>
+                            <td>{vendor.vendorName}</td>
+                            <td>{vendor.contactNumber}</td>
+                            <td>{vendor.emailId}</td>
+                            <td>{vendor.products?.find(
+                              p => p.productName === selectedProductName
+                            )?.productPrice === 0 ? (
+                              <div className='input-group mb-3'>
+                                <input
+                                  type='text'
+                                  className='form-control'
+                                  placeholder='Enter Price'
+                                  aria-label='Enter Price'
+                                  hidden={isPriceZero}
+                                  onChange={e => {
+                                    newPrice = e.target.value
+                                  }}
+                                />
+                                <button
+                                  className='btn btn-outline-secondary'
+                                  type='button'
+                                  id='button-addon2'
+                                  onClick={() => {
+                                    axios
+                                      .put(
+                                        `http://localhost:8080/api/product/${vendor.products?.find(
+                                          p => p.productName === selectedProductName
+                                        )?.productId}`,
+                                        {
+                                          productName: selectedProductName,
+                                          productPrice: newPrice,
+                                        }
+                                      )
+                                      .then(res => {
+                                        console.log(res.data)
+                                        getAllVendor()
+                                      })
+                                      .catch(err => {
+                                        console.log(err)
+                                      })
+                                  }}
+                                >
+                                  Update
+                                </button>
+                              </div>
 
-                      ) : vendor.products?.find(
-                        p => p.productName === selectedProductName
-                      )?.productPrice}</td>
+                            ) : vendor.products?.find(
+                              p => p.productName === selectedProductName
+                            )?.productPrice}</td>
+                            <td>
+                              <button className='btn btn-primary'
+                                onClick={toggle}
+                              >Edit price</button>
+                              <Modal isOpen={modal} toggle={toggle} >
+                                <ModalHeader toggle={toggle}>Update Price</ModalHeader>
+                                <ModalBody>
+                                  <div className='input-group mb-3'>
+                                    <input
+                                      type='text'
+                                      className='form-control'
+                                      placeholder='Enter Price'
+                                      aria-label='Enter Price'
+                                      onChange={e => {
+                                        newPrice = e.target.value
+                                      }}
+
+                                    />
+                                    <button
+                                      className='btn btn-outline-secondary'
+                                      type='button'
+                                      id='button-addon2'
+                                      onClick={() => {
+                                        axios
+                                          .put(
+                                            `http://localhost:8080/api/product/${vendor.products?.find(
+                                              p => p.productName === selectedProductName
+                                            )?.productId}`,
+                                            {
+                                              productName: selectedProductName,
+                                              productPrice: newPrice,
+                                            }
+                                          )
+                                          .then(res => {
+                                            console.log(res.data)
+                                            getAllVendor()
+                                          })
+                                          .catch(err => {
+                                            console.log(err)
+                                          })
+
+                                        setModal(!modal);
+                                      }
 
 
-                    </tr>
-                  )
-                })
-                }
-                {
-                  filteredVendors.length === 0 &&
-                  <tr>
-                    <td colSpan="5" className='fs-1'>No Data Found</td>
-                  </tr>
+                                      }
+                                    >
+                                      Update
+                                    </button>
+                                  </div>
+                                </ModalBody>
+                                <ModalFooter>
+
+                                  <Button color="secondary" onClick={toggle}>
+                                    Cancel
+                                  </Button>
+                                </ModalFooter>
+                              </Modal>
+                            </td>
 
 
-                }
-              </tbody>
-            </table>
+
+
+                          </tr>
+                        )
+                      })
+                      }
+                      {
+                        filteredVendors.length === 0 &&
+                        <tr>
+                          <td colSpan="5" className='fs-1'>No Data Found</td>
+                        </tr>
+
+
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              ) : <div className="col-md-12">
+                <h2> Please select a product from the dropdown first .</h2>
+              </div>
+            }
+
+
           </div>
-        </div>
+        </div >
       }
       <Footer />
-    </div>
+
+    </div >
   )
 }
 
