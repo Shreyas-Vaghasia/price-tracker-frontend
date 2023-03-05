@@ -19,6 +19,7 @@ const Footer = () => {
         className='text-reset fw-bold mx-2'
         href='https://www.linkedin.com/in/shreyasvaghasia/'
         target='_blank'
+        rel="noreferrer"
       >
         Designed by Shreyas R Vaghasia
       </a>
