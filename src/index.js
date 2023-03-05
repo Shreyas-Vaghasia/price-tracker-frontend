@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -10,6 +8,7 @@ import {
 import HomePage from './pages/HomePage';
 import AddProductPage from './pages/AddProductPage';
 import AddVendorPage from './pages/AddVendorPage';
+import EditProduct from './pages/EditProduct';
 
 
 const router = createBrowserRouter([
@@ -25,6 +24,16 @@ const router = createBrowserRouter([
     path: "/add-new-vendor",
     element: <AddVendorPage />,
   },
+  {
+    path: "/edit-product/:id",
+    element: <EditProduct />,
+  }
+  ,
+
+  {
+    path: "*",
+    element: <div>Not Found</div>,
+  }
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

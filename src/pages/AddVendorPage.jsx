@@ -4,8 +4,12 @@ import Footer from './../components/Footer'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import Select from 'react-select'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { useNavigate } from "react-router-dom";
 
 const AddVendorPage = () => {
+  const navigate = useNavigate();
+
   let [products, setProducts] = useState([])
   let [selectedProducts, setSelectedProducts] = useState([])
   let [loading, setLoading] = useState(false)
@@ -16,27 +20,41 @@ const AddVendorPage = () => {
   let [productOptions, setProductOptions] = useState([])
   let [success, setSuccess] = useState(false)
   let [vendorsList, setVendorsList] = useState([])
+  let [selectedVendor, setSelectedVendor] = useState({})
+  const [modal, setModal] = useState(false);
+
+  const toggle = () => setModal(!modal);
 
 
 
   const deleteVendor = (vendorId) => {
-    window.confirm('Are you sure you want to delete this vendor?')
+    if (window.confirm('Are you sure you want to delete this vendor?')) {
+      axios.delete(`http://localhost:8080/api/vendor/${vendorId}`)
+        .then(res => {
+          console.log(res.data)
+          getAllVendors();
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
 
-    axios.delete(`http://localhost:8080/api/vendor/${vendorId}`)
-      .then(res => {
-        console.log(res.data)
-        getAllVendors();
-      })
-      .catch(err => {
-        console.log(err)
-      })
+
 
     getAllVendors();
     getAllProducts();
   }
 
   const editVendor = (vendorId) => {
-    //open modal 
+
+    let v = vendorsList.filter(vendor => vendor.vendorId === vendorId);
+    console.log(v)
+    setSelectedVendor(v[0]);
+
+    toggle();
+
+    getAllVendors();
+    getAllProducts();
 
   }
 
@@ -82,6 +100,7 @@ const AddVendorPage = () => {
       })
 
     getAllVendors();
+    getAllProducts();
   }
 
   const getAllVendors = () => {
@@ -112,7 +131,33 @@ const AddVendorPage = () => {
         console.log(err)
       })
   }
+  const deleteProduct = (productId) => {
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      axios.delete(`http://localhost:8080/api/product/${productId}`)
+        .then(res => {
+          console.log(res.data)
+          editVendor(selectedVendor.vendorId);
+        })
+        .catch(err => {
+          console.log(err)
+        })
 
+
+      getAllVendors();
+      getAllProducts();
+    }
+
+
+
+
+
+    getAllVendors();
+    getAllProducts();
+  }
+
+  const editProduct = (productId) => {
+    navigate(`/edit-product/${productId}`)
+  }
 
 
   useEffect(() => {
@@ -249,14 +294,14 @@ const AddVendorPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {vendorsList.map((vendor, index) => (
+                {vendorsList && vendorsList.map((vendor, index) => (
                   <tr key={vendor.vendorId}>
                     <th scope='row'>{index + 1}</th>
                     <td>{vendor.vendorName}</td>
                     <td>{vendor.contactNumber}</td>
                     <td>{vendor.emailId}</td>
                     <td>
-                      {vendor.products.map(product => (
+                      {vendor.products && vendor.products.map(product => (
                         <span key={product.productId}>{product.productName + ","}</span>
                       ))}
                     </td>
@@ -289,12 +334,70 @@ const AddVendorPage = () => {
         </div>
 
 
+        <Modal isOpen={modal} toggle={toggle} >
+          <ModalHeader toggle={toggle}>{
+            selectedVendor ? selectedVendor.vendorName : ""
+          }</ModalHeader>
+          <ModalBody>
+            <table className='table table-striped'>
+              <thead>
+                <tr>
+                  <th scope='col'>#</th>
+                  <th scope='col'>Product Name</th>
+                  <th scope='col'>Product Price </th>
+                  <th scope='col'>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  console.log(selectedVendor)
 
+                }
+                {
+                  selectedVendor.products?.map(product => {
+                    return (
+                      <tr key={product.productId}>
+                        <th scope='row'>{product.productId}</th>
+                        <td>{product.productName}</td>
+                        <td>{product.productPrice}</td>
+                        <td>
+
+                          <button
+                            type='button'
+                            className='btn btn-primary'
+                            onClick={() => editProduct(product.productId)}
+                          >
+                            Edit
+                          </button>
+
+                          <button
+                            type='button'
+                            className='btn btn-danger mx-2'
+                            onClick={() => deleteProduct(product.productId)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+
+
+
+                      </tr>
+                    )
+                  })
+                }
+
+
+              </tbody>
+            </table>
+          </ModalBody>
+
+        </Modal>
 
         <Footer />
       </div>
     </>
   )
 }
+
 
 export default AddVendorPage

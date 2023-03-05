@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import NavigationBar from '../components/NavigationBar'
 import axios from 'axios'
 import Footer from '../components/Footer'
-import Select from 'react-select'
 
 const AddProductPage = () => {
   const [productName, setProductName] = useState('')
