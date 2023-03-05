@@ -71,6 +71,7 @@ const EditProduct = () => {
         <div className=''>
             <NavigationBar />
             <div className="container col-md-6 mt-4">
+                <h3>Edit Product</h3>
                 <div className='input-group mb-3'>
 
                     <input
@@ -103,7 +104,7 @@ const EditProduct = () => {
                 </div>
                 <div className='input-group mb-3'>
                     <button
-                        className='btn btn-outline-secondary'
+                        className='btn btn-primary'
                         type='button'
                         id='button-addon2'
                         onClick={() => {

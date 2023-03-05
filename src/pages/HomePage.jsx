@@ -20,6 +20,7 @@ const HomePage = () => {
   const [modal, setModal] = useState(false);
   const [isPriceEditing, setIsPriceEditing] = useState(false)
   const toggle = () => setModal(!modal);
+  const [datas, setDatas] = useState([]);
 
 
   const getAllProduct = () => {
@@ -69,7 +70,8 @@ const HomePage = () => {
     },
   ];
 
-  const [ csvData, setCsvData] = useState(data);
+
+  const [csvData, setCsvData] = useState(data);
 
   const fiterVendorsByProduct = (productName) => {
     let filteredVndrs = [];
@@ -95,6 +97,12 @@ const HomePage = () => {
 
     setFilteredVendors(sortedProducts)
     let allPhoneNumbers = sortedProducts.map(vendor => vendor.contactNumber)
+    let vData = sortedProducts.map(vendor => {
+      return {
+        vendorName: vendor.vendorName,
+        contactNumber: vendor.contactNumber,
+      }
+    })
     console.log(allPhoneNumbers)
 
     let updatedData = [
@@ -102,7 +110,10 @@ const HomePage = () => {
         numbers: [...allPhoneNumbers]
       }
     ];
+    //{ contactNumber: "Ahmed", vendorName: "Tomi", email: "ah@smthing.co.com" },
     setCsvData(updatedData)
+    setDatas(vData)
+    console.log(vData)
 
 
     // console.log([...allPhoneNumbers])
@@ -195,9 +206,8 @@ const HomePage = () => {
                     <thead>
                       <tr>
                         <th scope="col">Vendor Name</th>
-                        <th scope="col" className='mx-2'>Vendor Phone
-                          <CSVLink data={csvData} headers={headers} filename={"vendors-contact-list.csv"}>
-
+                        <th scope="col" className=''>Vendor Phone
+                          <CSVLink data={datas} filename={"vendors-contact-list.csv"}>
                             Download
                           </CSVLink>
                         </th>

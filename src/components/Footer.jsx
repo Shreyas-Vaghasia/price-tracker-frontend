@@ -3,12 +3,15 @@ import React from 'react'
 const Footer = () => {
   return (
     <div
-      className='text-center p-4'
+      className='text-center p-2'
       style={{
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        backgroundColor: 'rgba(0, 0, 0, 1)',
         display: 'inline-block',
         width: '100%',
-        bottom: '0'
+        bottom: '0',
+        position: 'fixed',
+        left: 0,
+        color: 'white',
       }}
     >
       © 2023 Copyright:

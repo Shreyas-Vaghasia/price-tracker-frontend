@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import Select from 'react-select'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
+import AddProductPage from './AddProductPage';
 
 const AddVendorPage = () => {
   const navigate = useNavigate();
@@ -22,10 +23,53 @@ const AddVendorPage = () => {
   let [vendorsList, setVendorsList] = useState([])
   let [selectedVendor, setSelectedVendor] = useState({})
   const [modal, setModal] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedVendorForAddingProducts, setSelectedVendorForAddingProducts] = useState({});
 
   const toggle = () => setModal(!modal);
 
+  const addMoreProductsToVendor = () => {
+    setLoading(true)
+    setError(false)
+    console.log(selectedProducts)
+    const data = {
+      vendorId: selectedVendorForAddingProducts.vendorId,
+      vendorName: selectedVendorForAddingProducts.vendorName,
+      vendorContactNumber: selectedVendorForAddingProducts.contactNumber,
+      vendorEmail: selectedVendorForAddingProducts.emailId,
 
+      products: selectedProducts.map(product => {
+        if (product.value === undefined) {
+
+        } else {
+          return {
+            productName: product.value
+          }
+        }
+      })
+
+    }
+    // console.log(data)
+    axios
+      .put(`http://localhost:8080/api/vendor/${selectedVendorForAddingProducts.vendorId}`, data)
+      .then(res => {
+        console.log(res.data)
+        setSuccess(true)
+        setLoading(false)
+        setSelectedProducts([])
+
+        getAllVendors();
+        getAllProducts();
+
+        setModalOpen(false)
+      })
+      .catch(err => {
+        console.log(err)
+        setLoading(false)
+        setError(true)
+      })
+
+  }
 
   const deleteVendor = (vendorId) => {
     if (window.confirm('Are you sure you want to delete this vendor?')) {
@@ -37,12 +81,13 @@ const AddVendorPage = () => {
         .catch(err => {
           console.log(err)
         })
+      getAllVendors();
+      getAllProducts();
     }
 
 
 
-    getAllVendors();
-    getAllProducts();
+
   }
 
   const editVendor = (vendorId) => {
@@ -63,9 +108,7 @@ const AddVendorPage = () => {
     e.preventDefault()
     setLoading(true)
     setError(false)
-
-
-    console.log(selectedProducts)
+    // console.log(selectedProducts)
     const data = {
       vendorName: vendorName,
       contactNumber: vendorContactNumber,
@@ -81,7 +124,7 @@ const AddVendorPage = () => {
       })
 
     }
-    console.log(data)
+    // console.log(data)
     axios
       .post('http://localhost:8080/api/vendor', data)
       .then(res => {
@@ -92,6 +135,8 @@ const AddVendorPage = () => {
         setVendorContactNumber('')
         setVendorEmail('')
         setSelectedProducts([])
+        getAllVendors();
+        getAllProducts();
       })
       .catch(err => {
         console.log(err)
@@ -99,8 +144,7 @@ const AddVendorPage = () => {
         setError(true)
       })
 
-    getAllVendors();
-    getAllProducts();
+
   }
 
   const getAllVendors = () => {
@@ -141,18 +185,17 @@ const AddVendorPage = () => {
         .catch(err => {
           console.log(err)
         })
-
-
       getAllVendors();
       getAllProducts();
+
+
     }
 
 
 
 
 
-    getAllVendors();
-    getAllProducts();
+
   }
 
   const editProduct = (productId) => {
@@ -172,7 +215,7 @@ const AddVendorPage = () => {
       {' '}
       <NavigationBar />
       <div className='container-fluid mt-4'>
-        <div className='row'>
+        <div className='row '>
           <div className='col-md-6'>
             <h1>Add Vendor</h1>
             <div className='row'>
@@ -288,7 +331,7 @@ const AddVendorPage = () => {
                   <th scope='col'>Vendor Name</th>
                   <th scope='col'>Contact Number</th>
                   <th scope='col'>Email</th>
-                  <th scope='col'>Products</th>
+                  {/* <th scope='col'>Products</th> */}
                   <th scope='col'>Action</th>
 
                 </tr>
@@ -300,11 +343,11 @@ const AddVendorPage = () => {
                     <td>{vendor.vendorName}</td>
                     <td>{vendor.contactNumber}</td>
                     <td>{vendor.emailId}</td>
-                    <td>
+                    {/* <td>
                       {vendor.products && vendor.products.map(product => (
                         <span key={product.productId}>{product.productName + ","}</span>
                       ))}
-                    </td>
+                    </td> */}
                     <td>
                       <button
                         type='button'
@@ -323,8 +366,18 @@ const AddVendorPage = () => {
                         Edit
                       </button>
                     </td>
-
-
+                    <td >
+                      <button
+                        type='button'
+                        className='btn btn-success'
+                        onClick={() => {
+                          setSelectedVendorForAddingProducts(vendor)
+                          setModalOpen(true)
+                        }}
+                      >
+                        Add
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -378,9 +431,6 @@ const AddVendorPage = () => {
                             Delete
                           </button>
                         </td>
-
-
-
                       </tr>
                     )
                   })
@@ -391,6 +441,27 @@ const AddVendorPage = () => {
             </table>
           </ModalBody>
 
+        </Modal>
+        <Modal isOpen={modalOpen} toggle={() => setModalOpen(false)}>
+          <ModalHeader toggle={() => setModalOpen(false)}>Add More Products -{selectedVendorForAddingProducts.vendorName}</ModalHeader>
+          <ModalBody>
+            <h6 className="h6">Select the products to add </h6>
+            <Select
+              defaultValue={selectedProducts}
+              isMulti
+              name='selectedProducts'
+              options={productOptions}
+              onChange={selectedProducts =>
+                setSelectedProducts(selectedProducts)
+              }
+              className='basic-multi-select'
+              classNamePrefix='select'
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={() => addMoreProductsToVendor()}>Submit</Button>
+            <Button color="secondary" onClick={() => setModalOpen(false)}>Close</Button>
+          </ModalFooter>
         </Modal>
 
         <Footer />

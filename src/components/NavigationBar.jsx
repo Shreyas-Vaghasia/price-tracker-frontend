@@ -1,12 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-
 const NavigationBar = () => {
   const navigate = useNavigate()
 
   return (
-    <div>
+    <div style={{
+
+
+    }}>
       <nav className='navbar navbar-expand-lg navbar-light bg-light'>
         <div className='container-fluid'>
           <a
@@ -29,7 +31,7 @@ const NavigationBar = () => {
           </button>
           <div className='collapse navbar-collapse' id='navbarSupportedContent'>
             <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
-              <form className='d-flex ms-3'>
+              {/* <form className='d-flex ms-3'>
                 <input
                   className='form-control me-2'
                   type='search'
@@ -39,11 +41,14 @@ const NavigationBar = () => {
                 <button className='btn btn-outline-success' type='submit'>
                   Search
                 </button>
-              </form>
+              </form> */}
             </ul>
             <button
               className='btn btn-outline-info mx-1'
-              onClick={() => (window.location.href = '/add-new-product')}
+              onClick={() => {
+                navigate('/add-new-product')
+                // window.location.href = '/add-new-product' 
+              }}
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -60,7 +65,10 @@ const NavigationBar = () => {
 
             <button
               className='btn btn-outline-warning mx-1'
-              onClick={() => (window.location.href = '/add-new-vendor')}
+              onClick={() => {
+                // window.location.href = '/add-new-vendor'
+                navigate('/add-new-vendor')
+              }}
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
