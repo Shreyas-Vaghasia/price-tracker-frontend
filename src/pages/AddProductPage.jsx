@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react'
 import NavigationBar from '../components/NavigationBar'
 import axios from 'axios'
 import Footer from '../components/Footer'
+import axiosBaseURL from '../httpCommon'
 
 const AddProductPage = () => {
+
+  
+
   const [productName, setProductName] = useState('')
   const [productPrice, setProductPrice] = useState('')
   const [loading, setLoading] = useState(false)
@@ -12,7 +16,7 @@ const AddProductPage = () => {
 
   const getAllProduct = () => {
     setLoading(true)
-    axios.get('http://localhost:8080/api/product-master')
+    axiosBaseURL.get('api/product-master')
       .then(res => {
         setProducts(res.data)
         setLoading(false)
@@ -44,13 +48,14 @@ const AddProductPage = () => {
     setLoading(true)
     e.preventDefault()
     console.log(productName)
-    axios
-      .post('http://localhost:8080/api/product-master', {
+    axiosBaseURL
+      .post('/api/product-master', {
         productName: productName
       })
       .then(res => {
         console.log(res)
         setLoading(false)
+        getAllProduct();
         alert('Product added successfully')
       })
       .catch(err => {
@@ -63,7 +68,7 @@ const AddProductPage = () => {
     setProductName('')
     setProductPrice('')
 
-    getAllProduct();
+
   }
 
   return (

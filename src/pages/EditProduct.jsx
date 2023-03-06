@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import axios from 'axios'
 import NavigationBar from './../components/NavigationBar';
 import { useNavigate } from 'react-router-dom';
+import axiosBaseURL from '../httpCommon'
+
 const EditProduct = () => {
 
     const { id } = useParams()
@@ -15,7 +17,7 @@ const EditProduct = () => {
 
     const getProduct = () => {
         setLoading(true)
-        axios.get(`http://localhost:8080/api/product/${id}`)
+        axiosBaseURL.get(`/api/product/${id}`)
             .then(res => {
                 setProduct(res.data)
                 setLoading(false)
@@ -40,9 +42,9 @@ const EditProduct = () => {
 
         setLoading(true)
 
-        axios
+        axiosBaseURL
             .put(
-                `http://localhost:8080/api/product/${id}`,
+                `/api/product/${id}`,
                 {
                     productPrice: price,
                     productName: name
@@ -71,7 +73,23 @@ const EditProduct = () => {
         <div className=''>
             <NavigationBar />
             <div className="container col-md-6 mt-4">
-                <h3>Edit Product</h3>
+                <div className=" d-flex justify-content-between">
+                    <h3>Edit Product</h3>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                            navigate(-1)
+                        }}
+
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+                        </svg>
+                        Back
+
+                    </button>
+                </div>
+
                 <div className='input-group mb-3'>
 
                     <input
