@@ -355,9 +355,9 @@ const AddVendorPage = () => {
                           className='btn btn-danger'
                           onClick={() => deleteVendor(vendor.vendorId)}
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                            <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                           </svg>
 
                         </button></div>
@@ -367,9 +367,9 @@ const AddVendorPage = () => {
                           onClick={() => editVendor(vendor.vendorId)}
                         >
                           {/* Edit */}
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                            <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                           </svg>
                         </button></div>
                         <div className="col-md-4"><button
@@ -402,6 +402,105 @@ const AddVendorPage = () => {
         <Modal isOpen={modal} toggle={toggle} >
           <ModalHeader toggle={toggle}>Edit products in : {selectedVendorForAddingProducts.vendorName}</ModalHeader>
           <ModalBody>
+            <div className='col-md-6'>
+              <form>
+                <label htmlFor='vendorName' className='form-label'>
+                  Vendor Name
+                </label>
+                <input
+                  type='text'
+                  className='form-control'
+                  id='vendorName'
+                  placeholder='Enter vendor name'
+                  required
+                  value={selectedVendor.vendorName}
+                  onChange={e => setSelectedVendor(
+                    {
+                      ...selectedVendor,
+                      vendorName: e.target.value
+                    }
+
+                  )}
+                />
+                <label htmlFor='vendorEmail' className='form-label'>
+                  Vendor Email
+                </label>
+                <input
+                  type='email'
+                  className='form-control'
+                  id='vendorEmail'
+                  placeholder='Enter vendor email'
+                  required
+                  value={selectedVendor.emailId}
+                  onChange={e => setSelectedVendor(
+                    {
+                      ...selectedVendor,
+                      emailId: e.target.value
+                    }
+
+                  )}
+                />
+                <label htmlFor='vendorPhone' className='form-label'>
+                  Vendor Phone
+                </label>
+                <input
+                  type='text'
+                  className='form-control'
+                  id='vendorPhone'
+                  placeholder='Enter vendor phone'
+                  required
+                  value={selectedVendor.contactNumber}
+                  onChange={e => setSelectedVendor(
+                    {
+                      ...selectedVendor,
+                      contactNumber: e.target.value
+                    }
+
+                  )}
+                />
+                <button
+                  type='submit'
+                  className='btn btn-primary mt-2'
+                  onClick={() => {
+
+                    //UPDATE VENDOR FOR EDITING NAME / EMAIL/ PHONE
+                    axiosBaseURL.put(`api/vendor/${selectedVendor.vendorId}`, {
+                      vendorName: selectedVendor.vendorName,
+                      emailId: selectedVendor.emailId,
+                      contactNumber: selectedVendor.contactNumber,
+                      products: selectedVendor.products.map(product => {
+                        return {
+                          productName: product.productName,
+                          productPrice: product.productPrice
+                        }
+                      })
+                    })
+
+                      .then(res => {
+                        console.log(res.data)
+                        alert('Vendor updated successfully')
+                        getAllVendors()
+
+                        setModalOpen(false)
+                        toggle()
+                      })
+                      .catch(err => {
+                        console.log(err)
+                      })
+
+                  }}
+                >
+                  {loading && (
+                    <span
+                      className='spinner-border spinner-border-sm'
+                      role='status'
+                      aria-hidden='true'
+                    ></span>
+                  )}
+                  Submit
+                </button>
+              </form>
+            </div>
             <table className='table table-striped'>
               <thead>
                 <tr>
