@@ -10,6 +10,7 @@ import AddProductPage from './pages/AddProductPage';
 import AddVendorPage from './pages/AddVendorPage';
 import EditProduct from './pages/EditProduct';
 import 'bootswatch/dist/pulse/bootstrap.min.css';
+import LoginPage from './pages/LoginPage';
 //pulse theme - Bootswatch 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,11 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <div>Not Found</div>,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />
+
   }
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root'));

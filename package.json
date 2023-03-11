@@ -10,6 +10,8 @@
     "bootstrap-icons": "^1.10.3",
     "bootswatch": "^5.2.3",
     "gh-pages": "^5.0.0",
+    "mdb-react-ui-kit": "^5.1.0",
+    "mdb-ui-kit": "^6.2.0",
     "react": "^18.2.0",
     "react-csv": "^2.2.2",
     "react-dom": "^18.2.0",
@@ -17,6 +19,7 @@
     "react-scripts": "5.0.1",
     "react-search-autocomplete": "^8.3.1",
     "react-select": "^5.7.0",
+    "react-toastify": "^9.1.1",
     "reactstrap": "^9.1.6",
     "web-vitals": "^2.1.4"
   },

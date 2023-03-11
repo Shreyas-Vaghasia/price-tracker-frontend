@@ -7,6 +7,8 @@ import Select from 'react-select'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
 import axiosBaseURL from '../httpCommon'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddVendorPage = () => {
   const navigate = useNavigate();
@@ -14,7 +16,8 @@ const AddVendorPage = () => {
   let [products, setProducts] = useState([])
   let [selectedProducts, setSelectedProducts] = useState([])
   let [loading, setLoading] = useState(false)
-  let [error, setError] = useState(false)
+  let [error, setError] = useState("")
+
   let [vendorName, setVendorName] = useState('')
   let [vendorContactNumber, setVendorContactNumber] = useState('')
   let [vendorEmail, setVendorEmail] = useState('')
@@ -109,6 +112,13 @@ const AddVendorPage = () => {
     setLoading(true)
     setError(false)
     // console.log(selectedProducts)
+
+    if (vendorName === '' || vendorContactNumber === '' || vendorEmail === '' || selectedProducts.length === 0) {
+      setError('Please fill all the fields')
+      setLoading(false)
+      return;
+    }
+
     const data = {
       vendorName: vendorName,
       contactNumber: vendorContactNumber,
@@ -137,11 +147,18 @@ const AddVendorPage = () => {
         setSelectedProducts([])
         getAllVendors();
         getAllProducts();
+        toast.success("Vendor added succesfully  !", {
+          position: toast.POSITION.TOP_CENTER
+        });
       })
       .catch(err => {
         console.log(err)
         setLoading(false)
-        setError(true)
+        setError(err.response.data.message)
+        toast.error(err.response.data.message, {
+          position: toast.POSITION.TOP_LEFT
+        });
+
       })
 
 
@@ -156,6 +173,7 @@ const AddVendorPage = () => {
       })
       .catch(err => {
         console.log(err)
+        setError(err.response.data.message)
       })
   }
   const getAllProducts = () => {
@@ -173,6 +191,8 @@ const AddVendorPage = () => {
       })
       .catch(err => {
         console.log(err)
+        setError(err.response.data.message)
+
       })
   }
   const deleteProduct = (productId) => {
@@ -184,6 +204,8 @@ const AddVendorPage = () => {
         })
         .catch(err => {
           console.log(err)
+          setError(err.response.data.message)
+
         })
       getAllVendors();
       getAllProducts();
@@ -212,23 +234,27 @@ const AddVendorPage = () => {
 
   return (
     <>
-      {' '}
       <NavigationBar />
       <div className='container-fluid mt-4'>
         <div className='row '>
           <div className='col-md-6'>
             <h1>Add Vendor</h1>
             <div className='row'>
-              {error && (
-                <div className='alert alert-danger' role='alert'>
-                  {error}
-                </div>
-              )}
-              {success && (
-                <div className='alert alert-success' role='alert'>
-                  {'Vendor added successfully'}
-                </div>
-              )}
+              {
+                error && (
+                  <div className='alert alert-danger alert-dismissible fade show' role='alert'>
+                    {error}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                  </div>
+                )}
+              {/* {
+                success && (
+                  <div className='alert alert-success' role='alert'>
+                    {'Vendor added successfully'}
+                  </div>
+                )
+              } */}
               <div className='col-md-6'>
                 <form>
                   <label htmlFor='vendorName' className='form-label'>
@@ -284,6 +310,7 @@ const AddVendorPage = () => {
                       className='basic-multi-select'
                       classNamePrefix='select'
                     />
+                    <ToastContainer />
 
                     {/* <select className='form-select' name='' id='' multiple>
                   {products.map(product => (
@@ -400,7 +427,7 @@ const AddVendorPage = () => {
 
 
         <Modal isOpen={modal} toggle={toggle} >
-          <ModalHeader toggle={toggle}>Edit products in : {selectedVendorForAddingProducts.vendorName}</ModalHeader>
+          <ModalHeader toggle={toggle}>Edit products in : {selectedProducts.vendorName}</ModalHeader>
           <ModalBody>
             <div className='col-md-6'>
               <form>
