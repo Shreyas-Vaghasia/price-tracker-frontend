@@ -115,6 +115,10 @@ const AddVendorPage = () => {
 
     if (vendorName === '' || vendorContactNumber === '' || vendorEmail === '' || selectedProducts.length === 0) {
       setError('Please fill all the fields')
+      toast.error("Please fill all the fields", {
+        position: toast.POSITION.TOP_LEFT
+      });
+
       setLoading(false)
       return;
     }
@@ -147,7 +151,8 @@ const AddVendorPage = () => {
         setSelectedProducts([])
         getAllVendors();
         getAllProducts();
-        toast.success("Vendor added succesfully  !", {
+
+        toast.success("Vendor added succesfully", {
           position: toast.POSITION.TOP_CENTER
         });
       })
@@ -201,10 +206,20 @@ const AddVendorPage = () => {
         .then(res => {
           console.log(res.data)
           editVendor(selectedVendor.vendorId);
+
+          toast.success("Product deleted succesfully  !", {
+            position: toast.POSITION.TOP_CENTER
+          });
+
         })
         .catch(err => {
           console.log(err)
           setError(err.response.data.message)
+
+          toast.error(err.response.data.message, {
+            position: toast.POSITION.TOP_LEFT
+          });
+
 
         })
       getAllVendors();
@@ -240,14 +255,16 @@ const AddVendorPage = () => {
           <div className='col-md-6'>
             <h1>Add Vendor</h1>
             <div className='row'>
-              {
+              <ToastContainer />
+
+              {/* {
                 error && (
                   <div className='alert alert-danger alert-dismissible fade show' role='alert'>
                     {error}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                   </div>
-                )}
+                )} */}
               {/* {
                 success && (
                   <div className='alert alert-success' role='alert'>
@@ -310,7 +327,6 @@ const AddVendorPage = () => {
                       className='basic-multi-select'
                       classNamePrefix='select'
                     />
-                    <ToastContainer />
 
                     {/* <select className='form-select' name='' id='' multiple>
                   {products.map(product => (
