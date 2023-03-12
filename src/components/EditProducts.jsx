@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import axiosBaseURL from '../httpCommon'
+import React, { useState } from 'react';
+import axiosBaseURL from '../httpCommon';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -19,6 +19,8 @@ export const EditProducts = ({ vendor, selectedProductName, isPriceEditing, setI
     const [paymentTerms, setPaymentTerms] = useState(selectedProduct.paymentTerms)
     const [grade, setGrade] = useState(selectedProduct.grade)
     const [isUpdated, setIsUpdated] = useState(false)
+    const [lastUpdated, setLastUpdated] = useState(selectedProduct.lastUpdated)
+
     const handleSave = () => {
 
         setLoading(true)
@@ -70,6 +72,16 @@ export const EditProducts = ({ vendor, selectedProductName, isPriceEditing, setI
                 {
                     isUpdated && <span className="badge text-bg-success">updated</span>
                 }
+                <div>
+                    <span className="badge text-bg-info">
+                        last updated:{lastUpdated != null ? lastUpdated.substring(0, 10) : "NA"}
+                        <br />
+                        <br />
+                        Time : {lastUpdated != null ? lastUpdated.substring(11, 19) : "NA"}
+
+                    </span>
+                </div>
+
 
             </td>
             <td>{vendor.contactNumber}</td>
