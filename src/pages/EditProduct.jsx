@@ -73,6 +73,7 @@ const EditProduct = () => {
                     ex: ex,
                     paymentTerms: paymentTerms,
                     grade: grade,
+                    lastPrice: product.productPrice,
 
                 }
             )

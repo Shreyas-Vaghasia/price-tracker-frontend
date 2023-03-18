@@ -11,6 +11,7 @@ import { UserContext } from '../Context/UserContext';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
+import axiosBaseURL from '../httpCommon'
 
 const LoginPage = () => {
 
@@ -27,7 +28,7 @@ const LoginPage = () => {
             toast.error('Please fill all the fields');
             return;
         }
-        axios.post('http://localhost:5000/api/auth/login', {
+        axiosBaseURL.post('/api/auth/login', {
             emailId: email,
             password: password
         })
@@ -38,7 +39,7 @@ const LoginPage = () => {
                 //set user in local storage
                 localStorage.setItem('currentUser', JSON.stringify(res.data));
                 console.log(currentUser);
-                navigate('/add-new-product')
+                navigate('/')
             }
             )
             .catch(err => {
@@ -59,9 +60,10 @@ const LoginPage = () => {
                         <div className="d-flex flex-column ms-5">
 
                             <div className="text-center">
-                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
-                                    style={{ width: '185px' }} alt="logo" />
-                                <h4 className="mt-1 mb-5 pb-1">Askhar Chemicals India PVT LTD</h4>
+                                <img src="https://aksharinternational.in/img/logo.png" class="img-fluid" alt="akshar international" title="Akshar International"/>
+                                    {/* <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+                                    style={{ width: '185px' }} alt="logo" /> */}
+                                    <h4 className="mt-1 mb-5 pb-1">Askhar Chemicals India PVT LTD</h4>
                             </div>
 
                             <p>Please login to your account</p>
@@ -72,7 +74,7 @@ const LoginPage = () => {
                                 value={email}
                             />
                             <MDBInput wrapperClass='mb-4' label='Password' id='form2' type='password'
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) => setPassword(e.target.value)} 
                                 value={password}
                             />
 

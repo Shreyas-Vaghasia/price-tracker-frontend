@@ -35,6 +35,7 @@ export const EditProducts = ({ vendor, selectedProductName, isPriceEditing, setI
                     ex: ex,
                     paymentTerms: paymentTerms,
                     grade: grade,
+                    lastPrice: selectedProduct.productPrice,
 
                 }
             )
@@ -78,6 +79,8 @@ export const EditProducts = ({ vendor, selectedProductName, isPriceEditing, setI
                         <br />
                         <br />
                         Time : {lastUpdated != null ? lastUpdated.substring(11, 19) : "NA"}
+                        <br />
+                        Last Price : {selectedProduct.lastPrice}
 
                     </span>
                 </div>

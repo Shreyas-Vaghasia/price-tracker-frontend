@@ -420,14 +420,15 @@ const HomePage = () => {
                                               }
 
                                               let message = `
-                                              Vendor Name: ${data.vendorName},
-                                              Contact Number: ${data.contactNumber},
-                                              Email Id: ${data.emailId} ,
-                                              Price: ${data.price} ,
-                                              moq: ${data.moq} ,
-                                              Packing: ${data.packing} ,
-                                              ex: ${data.ex} ,
-                                              Payment Terms: ${data.paymentTerms} ,
+                                              Vendor Name: ${data.vendorName},\n
+                                              Contact Number: ${data.contactNumber},\n
+                                              Email Id: ${data.emailId} ,\n
+                                              Price: ${data.price} ,\n
+                                              Product Name : ${selectedProductName} ,\n
+                                              moq: ${data.moq} ,\n
+                                              Packing: ${data.packing} ,\n
+                                              ex: ${data.ex} ,\n
+                                              Payment Terms: ${data.paymentTerms} ,\n
                                               Grade: ${data.grade} \n                                              
                                               `;
                                               console.log(message)
@@ -462,7 +463,7 @@ const HomePage = () => {
                   :
                   (
                     <div className="col-md-12">
-                      <h2> Please select a product from the dropdown first or searh by typing </h2>
+                      <h2> Please select a product from the dropdown first or search by typing </h2>
                     </div>
                   )
               }
