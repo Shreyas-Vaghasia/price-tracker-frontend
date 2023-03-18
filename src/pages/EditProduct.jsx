@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useParams } from "react-router-dom";
 import axios from 'axios'
 import NavigationBar from './../components/NavigationBar';
 import { useNavigate } from 'react-router-dom';
 import axiosBaseURL from '../httpCommon'
+import { UserContext } from '../Context/UserContext';
 
 const EditProduct = () => {
 
@@ -19,6 +20,7 @@ const EditProduct = () => {
     const [paymentTerms, setPaymentTerms] = useState('')
     const [grade, setGrade] = useState('')
     const [lastUpdated, setLastUpdated] = useState('')
+    const { setCurrentUser, currentUser } = useContext(UserContext);
 
 
     const navigate = useNavigate();
@@ -49,6 +51,9 @@ const EditProduct = () => {
             )
     }
     useEffect(() => {
+        let user = JSON.parse(localStorage.getItem('currentUser') ? localStorage.getItem('currentUser') : '{}');
+        setCurrentUser(user)
+
         getProduct();
     }, [])
 

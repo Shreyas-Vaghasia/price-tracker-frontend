@@ -2,13 +2,14 @@ import React from 'react'
 import NavigationBar from './../components/NavigationBar'
 import Footer from './../components/Footer'
 import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import Select from 'react-select'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
 import axiosBaseURL from '../httpCommon'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { UserContext } from '../Context/UserContext';
 
 const AddVendorPage = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const AddVendorPage = () => {
   const [modal, setModal] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedVendorForAddingProducts, setSelectedVendorForAddingProducts] = useState({});
+  const { setCurrentUser, currentUser } = useContext(UserContext)
 
   const toggle = () => setModal(!modal);
 
@@ -241,7 +243,8 @@ const AddVendorPage = () => {
 
 
   useEffect(() => {
-
+    let user = JSON.parse(localStorage.getItem('currentUser'))
+    setCurrentUser(user)
     getAllVendors();
     getAllProducts();
 

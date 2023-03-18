@@ -11,6 +11,9 @@ import AddVendorPage from './pages/AddVendorPage';
 import EditProduct from './pages/EditProduct';
 import 'bootswatch/dist/pulse/bootstrap.min.css';
 import LoginPage from './pages/LoginPage';
+import App from './App';
+
+
 //pulse theme - Bootswatch 
 const router = createBrowserRouter([
   {
@@ -44,6 +47,6 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <App />
   </React.StrictMode>
 );

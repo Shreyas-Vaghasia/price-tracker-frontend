@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import NavigationBar from '../components/NavigationBar'
 import axios from 'axios'
 import Footer from '../components/Footer'
 import axiosBaseURL from '../httpCommon'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { UserContext } from '../Context/UserContext';
 
 const AddProductPage = () => {
 
 
-
+  const { setCurrentUser, currentUser } = useContext(UserContext)
   const [productName, setProductName] = useState('')
   const [productPrice, setProductPrice] = useState('')
   const [loading, setLoading] = useState(false)
@@ -36,7 +37,8 @@ const AddProductPage = () => {
   }
 
   useEffect(() => {
-
+    let user = JSON.parse(localStorage.getItem('currentUser'))
+    setCurrentUser(user)
     getAllProduct();
 
   }, [])

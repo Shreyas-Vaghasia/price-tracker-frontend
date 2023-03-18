@@ -5,19 +5,56 @@ import {
     MDBCol,
     MDBInput
 } from 'mdb-react-ui-kit';
-
+import { useContext, useState } from 'react';
+// import { UserContext } from '../App';
+import { UserContext } from '../Context/UserContext';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
 
 const LoginPage = () => {
 
+    const { setCurrentUser, currentUser } = useContext(UserContext);
+
     const navigate = useNavigate()
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (email === '' || password === '') {
+            toast.error('Please fill all the fields');
+            return;
+        }
+        axios.post('http://localhost:5000/api/auth/login', {
+            emailId: email,
+            password: password
+        })
+            .then(res => {
+                console.log(res.data);
+                setCurrentUser(res.data);
+                toast.success('Login Successfull');
+                //set user in local storage
+                localStorage.setItem('currentUser', JSON.stringify(res.data));
+                console.log(currentUser);
+                navigate('/add-new-product')
+            }
+            )
+            .catch(err => {
+                console.log(err);
+                toast.error('Invalid Credentials');
+            }
+            )
+
+    }
 
     return (
         <div>
             <div className="my-5 gradient-form container">
 
                 <div className='row'>
-
+                    <ToastContainer />
                     <div col='6' className="mb-5 col">
                         <div className="d-flex flex-column ms-5">
 
@@ -30,13 +67,21 @@ const LoginPage = () => {
                             <p>Please login to your account</p>
 
 
-                            <MDBInput wrapperClass='mb-4' label='Email address' id='form1' type='email' />
-                            <MDBInput wrapperClass='mb-4' label='Password' id='form2' type='password' />
+                            <MDBInput wrapperClass='mb-4' label='Email address' id='form1' type='email'
+                                onChange={(e) => setEmail(e.target.value)}
+                                value={email}
+                            />
+                            <MDBInput wrapperClass='mb-4' label='Password' id='form2' type='password'
+                                onChange={(e) => setPassword(e.target.value)}
+                                value={password}
+                            />
 
                             <div className="text-center pt-1 mb-5 pb-1">
-                                <button className="mb-4 w-100 gradient-custom-2 btn "
-                                    onClick={() => {
-                                        navigate('/')
+                                <button className="mb-4 w-100 gradient-custom-2 btn text-white "
+                                    onClick={(event) => {
+
+                                        handleSubmit(event);
+                                        // navigate('/')
                                         // window.location.href = '/add-new-product' 
 
                                     }

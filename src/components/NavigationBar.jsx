@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../Context/UserContext';
+
 const NavigationBar = () => {
   const navigate = useNavigate()
+  const { setCurrentUser, currentUser } = useContext(UserContext);
 
   return (
     <div style={{
@@ -82,6 +85,46 @@ const NavigationBar = () => {
               </svg>
               <i className='bi bi-plus-circle-fill'></i>Add New Vendor
             </button>
+            {/* display curent user */}
+            {currentUser ? (
+
+              <button type="button" class="btn btn-outline-secondary position-relative">
+                {currentUser.emailId}
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {currentUser.role}
+                  <span class="visually-hidden">unread messages</span>
+                </span>
+              </button>
+            ) : (
+              <span>
+                <i className='bi bi-person-circle'></i> Guest
+              </span>
+            )}
+            {/* logout button */}
+
+            {currentUser ? (
+              <button
+                className='btn btn-outline-danger mx-1'
+                onClick={() => {
+                  setCurrentUser(null)
+                  localStorage.removeItem('currentUser')
+                  navigate('/login')
+                }}
+              >
+                <i className='bi bi-box-arrow-right'></i>Logout
+              </button>
+            ) : (
+              <button
+                className='btn btn-outline-success mx-1'
+                onClick={() => {
+                  navigate('/login')
+                }}
+              >
+                <i className='bi bi-box-arrow-right'></i>Login
+              </button>
+            )
+
+            }
           </div>
         </div>
       </nav>
